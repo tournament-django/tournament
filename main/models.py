@@ -57,7 +57,7 @@ class Tournament(models.Model):
     coaches = models.ManyToManyField(Coach, verbose_name="lista trenerow", blank=True)
 
     def __unicode__(self):
-        return self.name + " " + self.start + " " + self.end
+        return unicode(self.name + " " + self.start.strftime('%Y-%m-%d') + " " + self.end.strftime('%Y-%m-%d'))
 
 
 class PlayerTournament(models.Model):

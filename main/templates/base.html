@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Turniej- {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+</head>
+<body>
+<div>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header"><a class="navbar-brand" href="{% url 'home' %}"><span
+                    class="glyphicon glyphicon-home"></span> Turniej</a>
+            </div>
+			<ul class="nav navbar-nav">
+				<li>
+					{% if request.session.user %}	
+                		<a href="{% url 'user' %}">Twoje konto</a></li>
+                	{% endif %}
+                <li>
+                	<a href="{% url 'KarateKyokushinMain' %}">Karate Kyokushin</a></li>
+                
+                <li>
+                    <a href="{% url 'KarateShotokanMain' %}">Karate Shotokan</a></li>
+
+            </ul>
+        </div>
+    </nav>
+</div>
+<div style="margin : 5em 2em;">
+    <h2>{% block header %}{% endblock %}</h2>
+    {% block content %}{% endblock %}
+</div>
+<div>
+    <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+		<div class="container-fluid">
+			{% if request.session.user %}
+            	<span class="label label-info">Jestes zalogowany jako {{ request.session.login }}</span>
+            	<a href="{% url 'logout' %}"><span class="label label-danger">Wyloguj się</span></a>
+			{% else %}
+            	<a href="{% url 'signIn' %}"> Logowanie </a> · <a href="{% url 'signUp' %}">Rejestracja</a>
+            {% endif %}
+        </div>
+    </nav>
+</div>
+
+</body>
+</html>

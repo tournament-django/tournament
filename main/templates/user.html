@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}Twoje konto{% endblock %}
+{% block content %}
+
+<div class="container-fluid">
+   <ul class="nav navbar-nav">
+   		<li>
+			<a href="{% url 'CreateTeam' %}">Utwórz drużynę</a>
+		</li>
+                
+		<li>
+			<a href="#">Wczytaj turniej</a>
+		</li> 
+
+  </ul>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Turnieje, w kórych jesteś zawodnikiem</div>
+                <div class="panel-body">
+                    <ul>
+                        {% for playerT in playersT %}
+                        <li><a href="{% url 'tournament' playerT.tournament_id.id %}">{{playerT.tournament_id.name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="panel-footer"><a href="{% url 'home' %}" class="btn btn-default">Przeglądaj wszystkie</a></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Turnieje, w których jesteś trenerem</div>
+                <div class="panel-body">
+                    <ul>
+                        {% for tournament in ctournaments %}
+                        <li><a href="{% url 'tournament' tournament.id %}">{{tournament.name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="panel-footer"><a href="#" class="btn btn-default">Przeglądaj wszystkie</a></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Twoje turnieje</div>
+                <div class="panel-body">
+                    <ul>
+                        {% for tournament in mtournaments %}
+                        <li><a href="{% url 'tournament' tournament.id %}">{{tournament.name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="panel-footer"><a href="#" class="btn btn-default">Przeglądaj wszystkie</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Twoje drużyny</div>
+                <div class="panel-body">
+                    <ul>
+                        {% for team in teams %}
+                        <li><a href="{% url 'team' team.id %}">{{team.name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="panel-footer"><a href="#" class="btn btn-default">Przeglądaj wszystkie</a></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Zaproszenie do drużyny: </div>
+                <div class="panel-body">
+                    <ul>
+                    	{% if playerteam %}
+                        		<li>{{ playerteam.team_id.name }} <a href="{% url 'playerToTeamAccept' playerteam.id %}"> Akceptuj </a></li>
+                    	{% endif%}
+                    </ul>
+                </div>
+                <div class="panel-footer"><a href="#" class="btn btn-default">Przeglądaj wszystkie</a></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Zaproszenia dla Twoich zawoników do turnieju: </div>
+                <div class="panel-body">
+                    <ul>
+                    	{% for player in AplayersT%}
+                        		<li>{{ player.tournament_id.name }} <a href="{% url 'playerToTournamentAccept' player.id %}"> Akceptuj </a></li>
+                    	{% endfor%}
+                    </ul>
+                </div>
+                <div class="panel-footer"><a href="{% url 'allPlayersTourAcceptByC' %}" class="btn btn-default">Akceptuj wszystkie</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Zgłoszenia zawodników do Twoich turniejów</div>
+                <div class="panel-body">
+                    <table class="table table-hover table-condensed">
+						<br>
+						{% for EplayerT in EplayersT %}
+						<tr>
+							<td class="col-md-3" align="center"><a href="{% url 'allTeamTourAcceptByM' EplayerT.player_id.team_id.id %}"> Akceptuj dużynę {{ EplayerT.player_id.team_id.name }} </a></td><td class="col-md-3">Zawodnik {{ EplayerT.player_id.name }} {{ EplayerT.player_id.surname }} zgłoszony do {{ EplayerT.tournament_id.name }}</td> <td class="col-md-3" align="center"><a href="{% url 'playerToTournamentAccept' EplayerT.id %}"> Akceptuj zawodnika</a></td>
+						</tr>
+						{% endfor %}
+					</table>
+                </div>
+                <div class="panel-footer"><a href="{% url 'allPlayersTourAcceptByM' %}" class="btn btn-default">Akceptuj wszystkie</a></div>
+            </div>
+        </div>
+	</div>
+</div>
+{% endblock %}

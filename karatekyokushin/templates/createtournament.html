@@ -13,7 +13,7 @@ $(document).ready(function() {
     $('.datepicker').datepicker();
 });
 </script>
-<form method="post" action="">
+<form method="post" action="{% request.path %}">
 	{% csrf_token %}
     <table class="table" style="width: 10%">
         <tr>

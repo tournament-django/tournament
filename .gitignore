@@ -1,5 +1,6 @@
 *.pyc
 *.swp
+*.bak
 .project
 .pydevproject
 local_settings.py

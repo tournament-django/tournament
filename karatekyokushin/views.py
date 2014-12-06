@@ -6,7 +6,7 @@ from django.shortcuts import render_to_response, redirect
 import random
 
 from karatekyokushin.forms import *
-
+from main.forms import *
 # Create your views here.
 
 def KarateKyokushinMain(request):
@@ -61,75 +61,6 @@ def KarateKyokushinCreate(request):
         return HttpResponse(template.render(context))
     else: 
         return redirect('/signIn/')
-
-def tournament(request, tournament_id):
-    template = loader.get_template('tournament.html')
-    tournament = Tournament.objects.get(id=tournament_id)
-    manager = Manager.objects.get(tournament=tournament)
-    teams = list()
-    players = list()
-    playersT = PlayerTournament.objects.filter(tournament_id=tournament, acceptedbymanager=True, acceptedbycoach=True)
-    for playerT in playersT:
-        player = playerT.player_id
-        players.append(player)
-        teams.append(Team.objects.get(id=player.team_id.id))
-        
-    if request.method == 'POST':
-        form = SelectArtsTournamentForm(request.POST, instance=tournament)
-        if form.is_valid():
-            form.save()
-            return redirect('tournament', tournament_id = tournament.id)
-    else:
-           form = SelectArtsTournamentForm()
-    context = RequestContext(request, {'tournament': tournament, 'teams': teams, 'players':players, 'manager':manager, 'form':form })
-    return HttpResponse(template.render(context))
-
-def player(request, player_id):
-    template = loader.get_template('player.html')
-    player = Player.objects.get(id=player_id)
-    team = Team.objects.get(id=player.team_id.id)
-    coach = Coach.objects.get(id=team.coach.id)
-    playersT = PlayerTournament.objects.get(player_id=player)
-    context = RequestContext(request, {'playersT': playersT, 'team': team, 'player':player, 'coach': coach,})
-    return HttpResponse(template.render(context))
-
-def addPlayersToTournament(request, tournament_id):
-    if 'user' in request.session:
-        template = loader.get_template('addPlayerToTournament.html')
-        tournament = Tournament.objects.get(id=tournament_id)
-        players = Player.objects.filter(acceptedbycoachteam=True, acceptedbyplayer=True)
-        for playerT in PlayerTournament.objects.filter(tournament_id=tournament):
-            players = players.exclude(id=playerT.player_id.id)
-        context = RequestContext(request, {'tournament': tournament, 'players':players })
-        return HttpResponse(template.render(context))
-    else: 
-        return redirect('/signIn/')
-
-def playerToAdd(request, player_id, tournament_id):
-    player = Player.objects.get(id=player_id)
-    tournament = Tournament.objects.get(id=tournament_id)
-    p=PlayerTournament.objects.create(player_id=player, tournament_id=tournament, acceptedbymanager=True, acceptedbycoach=False)
-    return redirect('addPlayersToTournament', tournament_id = tournament.id)
-
-def enterPlayerTour(request, player_id, tournament_id):
-    player = Player.objects.get(id=player_id)
-    tournament = Tournament.objects.get(id=tournament_id)
-    p=PlayerTournament.objects.create(player_id=player, tournament_id=tournament, acceptedbymanager=False, acceptedbycoach=True)
-    return redirect('enterForTournament', tournament_id = tournament.id, user_id = player.team_id.coach.user_id.id)
-
-def playerToTournamentAccept(request, playerT_id):
-    PlayerTournament.objects.filter(id=playerT_id).update(acceptedbymanager=True, acceptedbycoach = True)
-    p = PlayerTournament.objects.get(id=playerT_id)
-    p.tournament_id.coaches.add(Coach.objects.get(id = Team.objects.get(id= p.player_id.team_id.id).coach.id))
-    return redirect('/user/')
-
-def deletePlayerTour(request, player_id, tournament_id):
-    player = Player.objects.get(id = player_id)
-    tournament = Tournament.objects.get(id = tournament_id)
-    coach = Coach.objects.get(id = Team.objects.get(id = player.team_id.id).coach.id)
-    tournament.coaches.remove(coach)
-    playerT = PlayerTournament.objects.get(player_id = player, tournament_id=tournament).delete()
-    return redirect('tournament', tournament_id = tournament.id)
     
 def tournamentOrganization(request, tournament_id):
     template = loader.get_template('tournamentOrganization.html')

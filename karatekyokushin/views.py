@@ -62,8 +62,8 @@ def KarateKyokushinCreate(request):
     else: 
         return redirect('/signIn/')
     
-def tournamentOrganization(request, tournament_id):
-    template = loader.get_template('tournamentOrganization.html')
+def kyoTournamentOrganization(request, tournament_id):
+    template = loader.get_template('kyoTournamentOrganization.html')
     tournament = Tournament.objects.get(id=tournament_id)
     manager = Manager.objects.get(tournament=tournament)
     categories = Category.objects.filter(tournament_id = tournament)
@@ -80,7 +80,7 @@ def createCategoryKyo(request, tournament_id):
                 tournament = Tournament.objects.get(id = tournament_id)
                 instance=form.save()#instance zawiera zapisany obiekt, takze z jego id
                 Category.objects.filter(id = instance.id).update(tournament_id = tournament)
-                return redirect('tournamentOrganization', tournament_id = tournament.id)
+                return redirect('kyoTournamentOrganization', tournament_id = tournament.id)
         else:
            form = KyoCreateCategoryForm()
         context = RequestContext(request, {

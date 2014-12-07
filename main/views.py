@@ -41,6 +41,8 @@ def signIn(request):
         request.session.set_expiry(3600) # ustawienie czasu trwania sesji na 1h
         request.session['user'] = us.id
         request.session['login'] = us.login
+        request.session['name'] = us.name
+        request.session['surname'] = us.surname
         return redirect('/user/')
     else:
         form = UserFormSignIn()
@@ -48,9 +50,12 @@ def signIn(request):
 
 
 def logout(request):
-    del request.session["user"]
-    del request.session["login"]
-    request.session.modified = True
+    if 'user' in request.session:
+        del request.session["user"]
+        del request.session["login"]
+        del request.session['name'] 
+        del request.session['surname']
+        request.session.modified = True
     return redirect('/')
 
 def user(request):
@@ -173,7 +178,27 @@ def updateTournament(request, tournament_id):
         return HttpResponse(template.render(context))
     else: 
         return redirect('/signIn/')
+def createTournament(request):
     
+    if 'user' in request.session:
+        template = loader.get_template('createtournament.html')
+        
+        if request.method == 'POST':
+            form = CreateTournamentForm(request.POST)
+            if form.is_valid():
+                user = User.objects.get(id=request.session['user'])
+                instance=form.save()#instance zawiera zapisany obiekt, takze z jego id
+                Manager.objects.create(user_id=user, tournament = instance)
+                return redirect('/user/')
+        else:
+           form = CreateTournamentForm()
+        context = RequestContext(request, {
+            'form': form,
+        })
+        return HttpResponse(template.render(context))
+    else: 
+        return redirect('/signIn/')  
+      
 def enterForTournament(request, tournament_id, user_id):
     if 'user' in request.session:
         template = loader.get_template('enterForTournament.html')

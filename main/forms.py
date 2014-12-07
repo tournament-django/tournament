@@ -39,7 +39,7 @@ class CreateTeamForm(ModelForm):
 class CreateTournamentForm(forms.ModelForm):
     class Meta:
         model = Tournament
-        fields= ('name', 'start', 'end' )
+        fields= ('name', 'start', 'end', 'type' )
         widgets={
             'start': forms.DateInput(format=('%d/%m/%Y'), attrs={'class': 'datepicker'}),
             'end': forms.DateInput(format=('%d/%m/%Y'), attrs={'class': 'datepicker'})

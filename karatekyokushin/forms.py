@@ -16,19 +16,6 @@ from django.utils import dateformat
 #                                              'label' : 'rok'})
 #        }
         
-class CreateTournamentForm(forms.ModelForm):
-    class Meta:
-        model = Tournament
-        fields= ('name', 'start', 'end' )
-        widgets={
-            'start': forms.DateInput(format=('%d/%m/%Y'), attrs={'class': 'datepicker'}),
-            'end': forms.DateInput(format=('%d/%m/%Y'), attrs={'class': 'datepicker'})
-        }
-
-class SelectArtsTournamentForm(forms.ModelForm):
-    class Meta:
-        model = Tournament
-        fields= ('type',)
 
 class KyoCreateCategoryForm(forms.ModelForm):
     class Meta:

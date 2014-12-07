@@ -34,7 +34,7 @@
     <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 		<div class="container-fluid">
 			{% if request.session.user %}
-            	<span class="label label-info">Jestes zalogowany jako {{ request.session.login }}</span>
+            	<span class="label label-info">Jestes zalogowany jako {{ request.session.name }} {{ request.session.surname }}</span>
             	<a href="{% url 'logout' %}"><span class="label label-danger">Wyloguj się</span></a>
 			{% else %}
             	<a href="{% url 'signIn' %}"> Logowanie </a> · <a href="{% url 'signUp' %}">Rejestracja</a>

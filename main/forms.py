@@ -35,7 +35,7 @@ class CreateTeamForm(ModelForm):
     class Meta:
         model = Team
         fields = ('name',)
-               
+           
 #update profile
 class UserFormUpdateProfile(ModelForm):
     class Meta:
@@ -64,3 +64,12 @@ def save(self, commit=True):
         user.save()
 
     return user
+
+class CreateTournamentForm(forms.ModelForm):
+    class Meta:
+        model = Tournament
+        fields= ('name', 'start', 'end', 'type' )
+        widgets={
+            'start': forms.DateInput(format=('%d/%m/%Y'), attrs={'class': 'datepicker'}),
+            'end': forms.DateInput(format=('%d/%m/%Y'), attrs={'class': 'datepicker'})
+        }

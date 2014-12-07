@@ -62,7 +62,7 @@ class Tournament(models.Model):
 
 class PlayerTournament(models.Model):
     player_id = models.ForeignKey(Player)
-    tournament_id = models.ForeignKey(Tournament)
+    tournament_id = models.ForeignKey(Tournament) 
     acceptedbymanager = models.BooleanField()
     acceptedbycoach = models.BooleanField()
 

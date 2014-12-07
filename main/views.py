@@ -103,6 +103,24 @@ def user(request):
     else: 
         return redirect('/signIn/')
 
+#update profile
+def updateProfile(request):
+    args = {}
+
+    if request.method == 'POST':
+        user = User.objects.get(id=request.session['user'])
+        form = UserFormUpdateProfile(request.POST, instance=user)
+        if form.is_valid():
+            inst = form.save()
+            request.session['login'] = inst.login
+            return redirect('/user/')
+
+    else:
+        form = UserFormUpdateProfile()
+
+        args['form'] = form
+        return render(request, 'updateProfile.html', args)
+
 def createTeam(request):
     if 'user' in request.session:
         template = loader.get_template('createteam.html')
@@ -208,6 +226,7 @@ def enterAllPlayersToTournament(request, tournament_id, user_id):
                 if PlayerTournament.objects.filter(tournament_id=tournament, player_id = playerC).count()==0:
                     PlayerTournament.objects.create(player_id=playerC, tournament_id=tournament, acceptedbymanager=False, acceptedbycoach=True)
     return redirect('/user/')
+
 def enterPlayersTeamTour(request, team_id, tournament_id):
     tournament = Tournament.objects.get(id=tournament_id)
     team = Team.objects.get(id=team_id)
@@ -229,6 +248,7 @@ def allPlayersTourAcceptByC(request):
                 if PlayerTournament.objects.filter(player_id=playerC, acceptedbymanager=True, acceptedbycoach=False):
                     PlayerTournament.objects.filter(player_id=playerC).update(acceptedbymanager=True, acceptedbycoach = True)
     return redirect('/user/')
+
 def allPlayersTourAcceptByM(request):
     user = User.objects.get(id=request.session['user'])
     if Manager.objects.filter(user_id=user.id):

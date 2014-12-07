@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %} Karate Shotokan {% endblock %}
+{% block header %} Wybierz turniej: {% endblock %}
+
+{% block content %}
+<table class="table" style="width: 10%">
+        <tr>
+            <td><label>Nazwa: </label>
+            <td>{{ form.name }}</td>
+        </tr>
+    </table>
+<tr>
+	<td><input type="submit" class="btn btn-default btn-primary" value="Wybierz">
+</tr>
+<a href="javascript:history.back()" class="btn btn-default btn-primary">Anuluj</a></td>
+{% endblock %}

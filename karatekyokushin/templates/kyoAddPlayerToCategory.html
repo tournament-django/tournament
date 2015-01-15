@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Dodawanie zawodników do zawodów{% endblock %}
+{% block title %}Dodawanie zawodników do kategorii{% endblock %}
 {% block content %}
 {% if request.session.user %}
 <div class="panel panel-default">
@@ -14,7 +14,7 @@
 			<br>
 			{% for player in players %}
 			<tr>
-				<td class="col-md-3">{{player.name}} {{player.surname}}</td><td class="col-md-3" align="center"><a href="{% url 'kyoPlayerToCategory' player.id category.id %}"> + </a></td>
+				<td class="col-md-3">{{player.name}} {{player.surname}}</td><td class="col-md-3" align="center"><a href="{% url 'kyoPlayerToAdd' player.id category.id %}"> + </a></td>
 			</tr>
 			{% endfor %}
 		</table>

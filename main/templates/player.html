@@ -19,16 +19,16 @@
 				<th> Data zakończenia </th>
 			</tr>
 			<br>
-			{% for tournament in tournaments %}
+			{% for playerT in playersT %}
 			<tr>
 			    <td>
-			         <a href="{% url 'tournament' tournament.id %}"> {{ tournament.name }} </a>
+			         <a href="{% url 'kyoTournamentOrganization' playerT.tournament_id.id %}"> {{ playerT.tournament_id.name }} </a>
 			    </td>
 			    <td>
-			        {{ tournament.start }}
+			        {{ playerT.tournament_id.start }}
 			    </td>
 			    <td>
-			        {{ tournament.end }}
+			        {{ playerT.tournament_id.end }}
 			    </td>
 			</tr>
 			{% endfor %}

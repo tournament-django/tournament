@@ -16,10 +16,12 @@ Aktualnie rozgrywane turnieje:
 		<br>
 		{% for tournament in tournaments %}
 		<tr>
-		    <td>
-		         <a href="{% url 'tournament' tournament.id %}"> {{ tournament.name }} </a>
-		    </td>
-		
+		    {%if tournament.type == "KYO" %}
+            <td><a href="{% url 'kyoTournamentOrganization' tournament.id %}">{{tournament.name}}</a></td>
+            {% else %}
+            <td><a href="{% url 'shoTournamentOrganization' tournament.id %}">{{tournament.name}}</a></td>
+            {%endif%}
+			
 		    <td>
 		        {{ tournament.start }}
 		    </td>

@@ -9,46 +9,441 @@
   <div class="panel-body">
     <br/>
     <div class="container-fluid">
-      {% if request.session.user %}
+	  {% if request.session.user == manager.user_id.id%}
 	  <ul class="nav navbar-nav">
 	   		<li>
 				<a href="{% url 'kyoAddPlayersToCategory' category.id %}">Dodaj zawodników </a>
 			</li>
 	  </ul>
-	  {% endif %}
-	  {% if request.session.user == manager.user_id.id%}
 	  <ul class="nav navbar-nav">
 	   		<li>
 				<a href="{% url 'kyoUpdateCategory' category.id %}">Edytuj kategorię</a>
 			</li>
 	  </ul>
 	  {% endif %}
+	  {% if request.session.user and request.session.user != manager.user_id.id %}
+	  <ul class="nav navbar-nav">
+	   		<li>
+				<a href="{% url 'kyoEnterPlayerForCategory' category.id request.session.user%}">Zgłoś zawodników</a>
+			</li>
+	  </ul>
+	  {% endif %}
 	</div>
-	{% if fights %}
+	{% if fights1 and category.type == "KM" %}
+	{% with fights1|last as last %}
 	<div class="container-fluid">
-		{% for fight in fights %}
-	    <div class="row">
-	        <div class="col-md-4">
-	            <div class="panel panel-primary">
-	                <div class="panel-body">
-	                    <ul>
-	                        <li> {{fight.firstplayer.player.name}} {{fight.firstplayer.player.surname}} </li>
-	                    </ul>
-	                    przeciwko
-	                    <ul>
-	                        <li>
-	                        	{% if fight.secondplayer %}
-	                        	{{fight.secondplayer.player.name}} {{fight.secondplayer.player.surname}} 
-	                        	{% else %}
-	                        	nie ma przeciwnika, zawodnik pierwszy przechodzi dalej 
-	                        	{% endif %}
-	                        </li>
-	                    </ul>
-	                </div>
-	        	</div>
-	        </div>
+		<div class="row">
+			{% if fights3 and not fights4 %}
+			<ul class="nav navbar-nav">
+				<li>
+					<a href="{% url 'kyoNextrounds' category.id last.round %}">nastpna runda</a>
+				</li>
+			</ul>
+			{% endif %}
+			{% if last.round > 0 %}
+			<ul class="nav navbar-nav">
+				<li>
+					<a href="{% url 'kyoPrevrounds' category.id last.round %}">poprzednia runda</a>
+				</li>
+			</ul>
+			{% endif %}
 		</div>
-		{% endfor %}
+	    <div class="row">
+	    	{% if fights4 %}
+				<div class="col-md-3">
+			{% else %}
+				<div class="col-md-4">
+			{% endif %}	
+		        {% for fight1 in fights1 %}
+		            <div class="panel panel-primary">
+		                <div class="panel-body">
+		                    <ul>
+		                        <li>
+		                        	{% if request.session.user == manager.user_id.id%} 
+		                        	<a href="{% url 'kyoWinnerFightKM' fight1.id 0 last.round %}">
+		                        	{% endif %}
+		                        		{{fight1.firstplayer.player.name}} {{fight1.firstplayer.player.surname}}
+		                        		<img src="{{ MEDIA_URL }}red.jpg" >
+		                        	{% if request.session.user == manager.user_id.id%}
+		                        	</a>
+		                        	{% endif %} 
+		                        </li>
+		                    </ul>
+		                    przeciwko
+		                    <ul>
+		                    	<li>
+		                    		{% if fight1.secondplayer and fight1.secondplayer and request.session.user == manager.user_id.id%} 
+		                        	<a href="{% url 'kyoWinnerFightKM' fight1.id 1 last.round %}">
+			                        	{{fight1.secondplayer.player.name}} {{fight1.secondplayer.player.surname}}
+			                        	{% else %}
+			                        	nie ma jeszcze przeciwnika
+			                        	{% endif %}
+			                        	<img src="{{ MEDIA_URL }}blue.jpg" />
+		                        	{% if fight1.secondplayer and request.session.user == manager.user_id.id%} 
+		                        	</a> 
+		                        	{% endif %}
+		                        </li>
+		                    </ul>
+		                </div>
+		        	</div>
+		        {% endfor %}
+	        </div>
+		{% if fights2 %}
+	        {% if fights4 %}
+				<div class="col-md-3">
+			{% else %}
+				<div class="col-md-4">
+			{% endif %}	
+			    <div class="panel-body">
+			        <br />
+			        <br />
+				</div>
+			{% for i in empty %}
+		            <div class="panel panel-primary">	
+					    <div class="panel-body">
+					        <ul>
+					        	<br />
+					    	</ul>
+						    <br>
+					        <ul>
+					        	<br />
+					        </ul>
+						</div>
+					</div>
+		        	<div class="panel panel-primary">	
+					    <div class="panel-body">
+					        <ul>
+					        	<br />
+					    	</ul>
+						    <br>
+					        <ul>
+					        	<br />
+					        </ul>
+						</div>
+					</div>
+		    	{% endfor %}
+			{% for fight2 in fights2 %}
+		            <div class="panel panel-primary">
+		                <div class="panel-body">
+		                    <ul>
+		                        <li>
+		                        	{% if fight2.secondplayer and request.session.user == manager.user_id.id%} 
+		                        	<a href="{% url 'kyoWinnerFightKM' fight2.id 0 last.round %}">
+		                        	{% endif %}
+		                        		{{fight2.firstplayer.player.name}} {{fight2.firstplayer.player.surname}}
+		                        		<img src="{{ MEDIA_URL }}red.jpg" >
+		                        	{% if request.session.user == manager.user_id.id%}
+		                        	</a>
+		                        	{% endif %} 
+		                        </li>
+		                    </ul>
+		                    przeciwko
+		                    <ul>
+		                    	<li>
+		                    		{% if fight2.secondplayer and request.session.user == manager.user_id.id%} 
+		                        	<a href="{% url 'kyoWinnerFightKM' fight2.id 1 last.round %}">
+			                        	{{fight2.secondplayer.player.name}} {{fight2.secondplayer.player.surname}}
+			                        	{% else %}
+			                        	nie ma jeszcze przeciwnika
+			                        	{% endif %}
+			                        	<img src="{{ MEDIA_URL }}blue.jpg" />
+		                        	{% if fight2.secondplayer and request.session.user == manager.user_id.id%} 
+		                        	</a> 
+		                        	{% endif %}
+		                        </li>
+		                    </ul>
+		                </div>
+		        	</div>
+		        	<div class="panel panel-primary">	
+					    <div class="panel-body">
+					        <ul>
+					        	<br />
+					    	</ul>
+						    <br>
+					        <ul>
+					        	<br />
+					        </ul>
+						</div>
+					</div>
+		    	{% endfor %}
+		    </div>
+		  {% endif %}
+		  {% if fights3 %}
+	        {% if fights4 %}
+				<div class="col-md-3">
+			{% else %}
+				<div class="col-md-4">
+			{% endif %}	
+			    <div class="panel-body">
+			        <br />
+			        <br />
+				</div>
+			{% for fight3 in fights3 %}
+				<div class="panel panel-primary">
+		                <div class="panel-body">
+		                    <ul>
+		                        <br />
+		                    </ul>
+		                    <br />
+		                    <ul>
+		                        <br />
+		                    </ul>
+		                </div>
+		        </div>
+		            <div class="panel panel-primary">
+		                <div class="panel-body">
+		                    <ul>
+		                        <li>
+		                        	{% if fight3.secondplayer and request.session.user == manager.user_id.id%} 
+		                        	<a href="{% url 'kyoWinnerFightKM' fight3.id 0 last.round %}">
+		                        	{% endif %}
+		                        		{{fight3.firstplayer.player.name}} {{fight3.firstplayer.player.surname}}
+		                        		<img src="{{ MEDIA_URL }}red.jpg" >
+		                        	{% if request.session.user == manager.user_id.id%}
+		                        	</a>
+		                        	{% endif %} 
+		                        </li>
+		                    </ul>
+		                    przeciwko
+		                    <ul>
+		                    	<li>
+		                    		{% if fight3.secondplayer and request.session.user == manager.user_id.id%} 
+		                        	<a href="{% url 'kyoWinnerFightKM' fight3.id 1 last.round %}">
+			                        	{{fight3.secondplayer.player.name}} {{fight3.secondplayer.player.surname}}
+			                        	{% else %}
+			                        	nie ma jeszcze przeciwnika
+			                        	{% endif %}
+			                        	<img src="{{ MEDIA_URL }}blue.jpg" />
+		                        	{% if fight3.secondplayer and request.session.user == manager.user_id.id%} 
+		                        	</a> 
+		                        	{% endif %}
+		                        </li>
+		                    </ul>
+		                </div>
+		        	</div>
+		        	<div class="panel panel-primary">	
+					    <div class="panel-body">
+					        <ul>
+					        	<br />
+					    	</ul>
+						    <br>
+					        <ul>
+					        	<br />
+					        </ul>
+						</div>
+					</div>
+		    	{% endfor %}
+		    </div>
+		    </div>
+		  {% endif %}
+		  {% if fights4 %}
+				<div class="col-md-3">
+			    <div class="panel-body">
+			        <br />
+			        <br />
+				</div>
+			{% for fight4 in fights4 %}
+				<div class="panel panel-primary">
+		                <div class="panel-body">
+		                    <ul>
+		                        <br />
+		                    </ul>
+		                    <br />
+		                    <ul>
+		                        <br />
+		                    </ul>
+		                </div>
+		        </div>
+		            <div class="panel panel-primary">
+		                <div class="panel-body">
+		                    <ul>
+		                        <li>
+		                        	{% if fight4.secondplayer and request.session.user == manager.user_id.id%} 
+		                        	<a href="{% url 'kyoWinnerFightKM' fight4.id 0 last.round %}">
+		                        	{% endif %}
+		                        		{{fight4.firstplayer.player.name}} {{fight4.firstplayer.player.surname}}
+		                        		<img src="{{ MEDIA_URL }}red.jpg" >
+		                        	{% if request.session.user == manager.user_id.id%}
+		                        	</a>
+		                        	{% endif %} 
+		                        </li>
+		                    </ul>
+		                    przeciwko
+		                    <ul>
+		                    	<li>
+		                    		{% if fight4.secondplayer and request.session.user == manager.user_id.id%} 
+		                        	<a href="{% url 'kyoWinnerFightKM' fight4.id 1 last.round %}">
+			                        	{{fight4.secondplayer.player.name}} {{fight4.secondplayer.player.surname}}
+			                        	{% else %}
+			                        	nie ma jeszcze przeciwnika
+			                        	{% endif %}
+			                        	<img src="{{ MEDIA_URL }}blue.jpg" />
+		                        	{% if fight4.secondplayer and request.session.user == manager.user_id.id%} 
+		                        	</a> 
+		                        	{% endif %}
+		                        </li>
+		                    </ul>
+		                </div>
+		        	</div>
+		        	<div class="panel panel-primary">	
+					    <div class="panel-body">
+					        <ul>
+					        	<br />
+					    	</ul>
+						    <br>
+					        <ul>
+					        	<br />
+					        </ul>
+						</div>
+					</div>
+		    	{% endfor %}
+		    </div>
+		    </div>
+		  {% endif %}
+		</div>
+		<div class="row">
+			{% if fights3 and not fights4 %}
+			<ul class="nav navbar-nav">
+				<li>
+					<a href="{% url 'kyoNextrounds' category.id last.round %}">nastpna runda</a>
+				</li>
+			</ul>
+			{% endif %}
+			{% if last.round > 0 %}
+			<ul class="nav navbar-nav">
+				<li>
+					<a href="{% url 'kyoPrevrounds' category.id last.round %}">poprzednia runda</a>
+				</li>
+			</ul>
+			{% endif %}
+			</div>		
+	</div>
+	{% endwith %}
+	{% elif category.type == "KT"%}
+	{% if request.session.user == manager.user_id.id%}
+		<ul class="nav navbar-nav">
+	   		<li>
+				<a href="{% url 'kyoEditResultsI' category.id %}">edytuj wyniki I tury </a>
+			</li>
+	  	</ul>
+	  	<ul class="nav navbar-nav">
+	   		<li>
+				<a href="{% url 'kyoEditResultsII' category.id %}">edytuj wyniki II tury </a>
+			</li>
+	  	</ul>
+	</div>  	
+	<div class="row">
+	{% endif %}
+	<div class="col-md-6">
+		<div class="panel-body">
+	    <table class="table table-hover">
+	    <caption>Tura I</caption>
+			<tr>
+				<th>Zawodnik</th>
+				<th>ocena 1</th>
+				<th>ocena 2</th>
+				<th>ocena 3</th>
+				<th>ocena 4</th>
+				<th>ocena 5</th>
+				<th>ocena 6</th>
+				<th>ocena 7</th>
+				<th>wynik I tury</th>
+				{% if request.session.user == manager.user_id.id%}
+				<th>usuwanie zwodnika</th>
+				{% endif %}
+			</tr>
+			<br>
+			{% for kata in katasI %}
+			<tr>
+			    <td>
+			          <a href="{% url 'player' kata.player_id.id %}"> {{ kata.player_id.name }} {{ kata.player_id.surname }} </a>
+			    </td>
+			    <td>
+			         {{ kata.point1I }}
+			    </td>
+			    <td>
+			         {{ kata.point2I }}
+			    </td>
+			    <td>
+			         {{ kata.point3I }}
+			    </td>
+			    <td>
+			         {{ kata.point4I }}
+			    </td>
+			    <td>
+			         {{ kata.point5I }}
+			    </td>
+			    <td>
+			         {{ kata.point6I }}
+			    </td>
+			    <td>
+			         {{ kata.point7I }}
+			    </td>
+			    <td>
+			         {{ kata.resultI }}
+			    </td>
+			    <td>
+			    	{% if request.session.user == manager.user_id.id%}
+			    		<a href="{% url 'kyoDeletePlayerFromCategory' kata.player_id.id category.id %}"> - </a>
+			    	{% endif %}
+			    </td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+	</div>
+	<div class="col-md-4">
+		<div class="panel-body">
+	    <table class="table table-hover">
+	    <caption>Tura II</caption>
+			<tr>
+				<th>Zawodnik</th>
+				<th>ocena 1</th>
+				<th>ocena 2</th>
+				<th>ocena 3</th>
+				<th>ocena 4</th>
+				<th>ocena 5</th>
+				<th>ocena 6</th>
+				<th>ocena 7</th>
+				<th>wynik II tury</th>
+			</tr>
+			<br>
+			{% for kata in katasII %}
+			<tr>
+			    <td>
+			          <a href="{% url 'player' kata.player_id.id %}"> {{ kata.player_id.name }} {{ kata.player_id.surname }} </a>
+			    </td>
+			    <td>
+			         {{ kata.point1II }}
+			    </td>
+			    <td>
+			         {{ kata.point2II }}
+			    </td>
+			    <td>
+			         {{ kata.point3II }}
+			    </td>
+			    <td>
+			         {{ kata.point4II }}
+			    </td>
+			    <td>
+			         {{ kata.point5II }}
+			    </td>
+			    <td>
+			         {{ kata.point6II }}
+			    </td>
+			    <td>
+			         {{ kata.point7II }}
+			    </td>
+			    <td>
+			         {{ kata.resultII}}
+			    </td>
+			</tr>
+			{% endfor %}
+		</table>
+	{% if request.session.user == manager.user_id.id%}
+	</div>
+	{% endif %}
+	</div>
 	</div>
 	{% else %}
 	<div class="col-md-8">
@@ -79,5 +474,6 @@
 	</div>
 	{% endif %}
   </div>
+</div>
 </div>
 {% endblock %}

@@ -6,6 +6,7 @@ from django.shortcuts import render_to_response, redirect
 from karateshotokan.forms import CreateTournamentFormShotokan, ChooseTournamentFormShotokan, CreateTeamFormShotokan
 from karateshotokan.models import Document
 from main.forms import User, Manager, Coach, Manager, Team
+from main.models import Tournament
 # Create your views here.
 
 def KarateShotokanMain(request):
@@ -32,6 +33,15 @@ def KarateShotokanCreate(request):
         return HttpResponse(template.render(context))
     else:
         return redirect('/signIn/')
+    
+    
+def shoTournamentOrganization(request, tournament_id):
+    template = loader.get_template('shoTournamentOrganization.html')
+    tournament = Tournament.objects.get(id=tournament_id)
+    
+    context = RequestContext(request, {'tournament': tournament })
+    return HttpResponse(template.render(context))
+
 
 def KarateShotokanChoose(request):
     if 'user' in request.session:

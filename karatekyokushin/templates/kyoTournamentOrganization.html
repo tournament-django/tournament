@@ -30,7 +30,7 @@
 			{% for category in categories%}
 			<tr>
 			    <td>
-			          <a href="{% url 'kyoCategory' category.id %}"> {{ category.name }} {{ category.type }} </a>
+			          <a href="{% url 'kyoCategory' category.id 0%}"> {{ category.name }} {{ category.type }} </a>
 			          	{% if request.session.user == manager.user_id.id%}
 			          		<a href="#"> - </a>
 			          	{% endif %}

@@ -25,8 +25,14 @@ class Category(models.Model):
 class FirstPlayer(models.Model):
     player = models.ForeignKey(Player)
 
+    def __unicode__(self):
+        return str(self.player)
+
 class SecondPlayer(models.Model):
     player = models.ForeignKey(Player)
+    
+    def __unicode__(self):
+        return str(self.player)
     
 class Fight(models.Model):
     category_id = models.ForeignKey(Category)
@@ -46,3 +52,31 @@ class Fight(models.Model):
     arbitersagainst = models.IntegerField(null=True)
     arbitersdraw = models.IntegerField(null=True)
     round = models.IntegerField()
+
+    def __unicode__(self):
+        return str(self.category_id) + " " + str(self.firstplayer) + " " + str(self.secondplayer) 
+    
+class Kata(models.Model):
+    category_id = models.ForeignKey(Category)
+    player_id = models.ForeignKey(Player)
+    point1I = models.IntegerField(blank=True, null = True)
+    point2I = models.IntegerField(blank=True, null = True)
+    point3I = models.IntegerField(blank=True, null = True)
+    point4I = models.IntegerField(blank=True, null = True)
+    point5I = models.IntegerField(blank=True, null = True)
+    point6I = models.IntegerField(blank=True, null = True)
+    point7I = models.IntegerField(blank=True, null = True)
+    resultI = models.IntegerField(blank=True, null = True)
+     
+    point1II = models.IntegerField(blank=True, null = True)
+    point2II = models.IntegerField(blank=True, null = True)
+    point3II = models.IntegerField(blank=True, null = True)
+    point4II = models.IntegerField(blank=True, null = True)
+    point5II = models.IntegerField(blank=True, null = True)
+    point6II = models.IntegerField(blank=True, null = True)
+    point7II = models.IntegerField(blank=True, null = True)
+    resultII = models.IntegerField(blank=True, null = True)
+    
+
+    def __unicode__(self):
+        return str(self.player_id) + " " + str(self.category_id)

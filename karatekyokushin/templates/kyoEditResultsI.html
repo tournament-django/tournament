@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{{category.name}}{% endblock %}
+{% block content %}
+{{category.tournament_id.name}}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{category.name}}</h3>
+  </div>
+  <div class="panel-body">
+    <br/>
+	<div class="col-md-12">
+	    <table class="table table-hover">
+	    <caption>Tura I</caption>
+			<tr>
+				<th>Zawodnik</th>
+				<th>ocena 1</th>
+				<th>ocena 2</th>
+				<th>ocena 3</th>
+				<th>ocena 4</th>
+				<th>ocena 5</th>
+				<th>ocena 6</th>
+				<th>ocena 7</th>
+				<th>potwierdzenie</th>
+			</tr>
+			<br>
+			{% for form in forms %}
+			<form method="post" action="">
+    		{% csrf_token %}
+			<tr>
+			    <td>
+			         {{ form.player_id }}
+			    </td>
+			    <td>
+			         {{ form.point1I }}
+			    </td>
+			    <td>
+			         {{ form.point2I }}
+			    </td>
+			    <td>
+			         {{ form.point3I }}
+			    </td>
+			    <td>
+			         {{ form.point4I }}
+			    </td>
+			    <td>
+			         {{ form.point5I }}
+			    </td>
+			    <td>
+			         {{ form.point6I }}
+			    </td>
+			    <td>
+			         {{ form.point7I }}
+			    </td>
+			    <td>
+			    	<input type="submit" class="btn btn-default btn-primary" value="Zatwierdź">
+                	<a href="/" class="btn btn-default">Anuluj</a>
+                </td>
+			</tr>
+			</form>
+			{% endfor %}
+		</table>
+	</div>
+  </div>
+</div>
+{% endblock %}

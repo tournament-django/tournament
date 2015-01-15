@@ -7,12 +7,9 @@
    		<li>
 			<a href="{% url 'CreateTeam' %}">Utwórz drużynę</a>
 		</li>
-<<<<<<< HEAD
-
        <li>
             <a href="{% url 'updateProfile' %}">Edytuj profil</a>
        </li>
-=======
                 
 		<li>
 			<a href="#">Wczytaj turniej</a>
@@ -24,11 +21,7 @@
 		<li>
 			<a href="#">Wybierz turniej</a>
 		</li>
->>>>>>> aacdbe03842857d8502ff79a8edf88ce7221609b
-
-		<li>
-			<a href="#">Wczytaj turniej</a>
-		</li>
+		
   </ul>
 </div>
 
@@ -40,7 +33,11 @@
                 <div class="panel-body">
                     <ul>
                         {% for playerT in playersT %}
-                        <li><a href="{% url 'tournament' playerT.tournament_id.id %}">{{playerT.tournament_id.name}}</a></li>
+                        {%if tournament.type == "KYO" %}
+                        	<li><a href="{% url 'kyoTournamentOrganization' playerT.tournament_id.id %}">{{playerT.tournament_id.name}}</a></li>
+                        {% else %}
+                        	<li><a href="{% url 'shoTournamentOrganization' playerT.tournament_id.id %}">{{playerT.tournament_id.name}}</a></li>
+                        {%endif%}
                         {% endfor %}
                     </ul>
                 </div>
@@ -53,7 +50,11 @@
                 <div class="panel-body">
                     <ul>
                         {% for tournament in ctournaments %}
-                        <li><a href="{% url 'tournament' tournament.id %}">{{tournament.name}}</a></li>
+                        	{%if tournament.type == "KYO" %}
+                        	<li><a href="{% url 'kyoTournamentOrganization' tournament.id %}">{{tournament.name}}</a></li>
+                        	{% else %}
+                        	<li><a href="{% url 'shoTournamentOrganization' tournament.id %}">{{tournament.name}}</a></li>
+                        	{%endif%}
                         {% endfor %}
                     </ul>
                 </div>
@@ -66,7 +67,11 @@
                 <div class="panel-body">
                     <ul>
                         {% for tournament in mtournaments %}
-                        <li><a href="{% url 'tournament' tournament.id %}">{{tournament.name}}</a></li>
+                        	{%if tournament.type == "KYO" %}
+                        	<li><a href="{% url 'kyoTournamentOrganization' tournament.id %}">{{tournament.name}}</a></li>
+                        	{% else %}
+                        	<li><a href="{% url 'shoTournamentOrganization' tournament.id %}">{{tournament.name}}</a></li>
+                        	{%endif%}
                         {% endfor %}
                     </ul>
                 </div>
